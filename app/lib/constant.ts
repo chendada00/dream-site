@@ -7,12 +7,7 @@ export const FooterRecord: Social[] = [
   {
     icon: 'icp.png',
     url: 'https://beian.miit.gov.cn/#/Integrated/index',
-    tip: '粤ICP备2023007649号-3'
-  },
-  {
-    icon: 'beian.png',
-    url: 'https://beian.mps.gov.cn/#/query/webSearch',
-    tip: '粤公网安备44030002003295号'
+    tip: '京ICP备2022017849号-3'
   }
 ]
 
@@ -20,13 +15,13 @@ export const FooterRecord: Social[] = [
  * @description: 社交图标
  */
 export const FooterSocial: Social[] = [
-  {
-    icon: 'ri:bar-chart-2-line',
-    url: 'https://umami.baiwumm.com/share/UHoy3xMybN92HMxF',
-    tip: '网站统计'
-  },
-  { icon: 'i-ri-github-line', url: 'https://github.com/baiwumm', tip: 'Github' },
-  { icon: 'i-ri-mail-line', url: 'mailto:me@baiwumm.com', tip: 'Email' },
-  { icon: 'i-ri-quill-pen-line', url: 'https://baiwumm.com', tip: '博客' },
-  { icon: 'mdi:api', url: 'https://api.baiwumm.com', tip: 'Easy Api' }
+  // {
+  //   icon: 'ri:bar-chart-2-line',
+  //   url: 'https://umami.baiwumm.com/share/UHoy3xMybN92HMxF',
+  //   tip: '网站统计'
+  // },
+  { icon: 'i-ri-github-line', url: 'https://github.com/chendada00/', tip: 'Github' },
+  // { icon: 'i-ri-mail-line', url: 'mailto:me@baiwumm.com', tip: 'Email' },
+  { icon: 'i-ri-quill-pen-line', url: 'https://blog.伴随.cn', tip: '博客' },
+  // { icon: 'mdi:api', url: 'https://api.baiwumm.com', tip: 'Easy Api' }
 ]
