@@ -41,7 +41,7 @@ const props = withDefaults(defineProps<SplashCursorProps>(), {
   PRESSURE: 0.1,
   PRESSURE_ITERATIONS: 20,
   CURL: 3,
-  SPLAT_RADIUS: 0.2,
+  SPLAT_RADIUS: 0.1,
   SPLAT_FORCE: 6000,
   SHADING: true,
   COLOR_UPDATE_SPEED: 10,
