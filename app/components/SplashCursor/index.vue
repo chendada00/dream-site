@@ -30,6 +30,18 @@ interface SplashCursorProps {
   BACK_COLOR?: ColorRGB;
   TRANSPARENT?: boolean;
 }
+// 参数名	含义解释	调大效果	调小效果
+// SPLAT_RADIUS	鼠标拖动时液体溅开的范围	水花更大、扩散更明显	特效更集中、更柔和 ✅
+// DENSITY_DISSIPATION	颜色消散速度（颜色褪得快不快）	颜色持续更长时间	颜色很快淡掉
+// VELOCITY_DISSIPATION	粒子速度衰减（拖动效果持续多久）	拖尾更长、更拖影	拖影短、动作干净
+// PRESSURE	流体压强影响	流动更强烈、涌动感强	流动更柔和平缓
+// CURL	涡旋强度（旋涡效果）	更多小漩涡效果	流动更简单直线
+// SPLAT_FORCE	拖动力度，像“推力”	拖一下爆开更明显	拖动力度更柔和
+// SHADING	是否启用光影（加立体感）	✅ 开启更真实	关闭更朴素
+// BLOOM_INTENSITY	发光强度（炫光效果）	更亮更梦幻	更自然
+// SHADOWS	是否开启阴影	真实感提高	性能小幅提升
+// SIM_RESOLUTION	流体模拟精度	更丝滑真实，但费性能	性能更好但颗粒明显
+// DYE_RESOLUTION	色彩分辨率（颜色细腻度）	渐变更平滑	色块明显
 
 /* ---------- props & defaults ---------- */
 const props = withDefaults(defineProps<SplashCursorProps>(), {
@@ -41,7 +53,7 @@ const props = withDefaults(defineProps<SplashCursorProps>(), {
   PRESSURE: 0.1,
   PRESSURE_ITERATIONS: 20,
   CURL: 3,
-  SPLAT_RADIUS: 0.1,
+  SPLAT_RADIUS: 0.06,
   SPLAT_FORCE: 6000,
   SHADING: true,
   COLOR_UPDATE_SPEED: 10,
