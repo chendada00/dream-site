@@ -18,7 +18,7 @@
       :VELOCITY_DISSIPATION="1"
       :PRESSURE="0.1"
       :PRESSURE_ITERATIONS="20"
-      :CURL="3"
+      :CURL="5"
       :SPLAT_RADIUS="0.2"
       :SPLAT_FORCE="6000"
       :SHADING="true"
