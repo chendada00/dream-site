@@ -15,7 +15,7 @@
 
 /* 设置全局默认字体 */
 html, body {
-  font-family: 'DingTalk Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-family: 'PingFang SC', 'DingTalk Sans', 'Microsoft YaHei', sans-serif;
   /* line-height: 1.6; */
 }
 
