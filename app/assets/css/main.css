@@ -13,15 +13,25 @@
   font-display: swap;
 }
 
-/* 设置全局默认字体 */
-html, body {
-  font-family: 'PingFang SC', 'DingTalk Sans', 'Microsoft YaHei', sans-serif;
-  /* line-height: 1.6; */
+
+/* 2) 定义一个 CSS 变量，方便全站统一管理 */
+:root {
+  --site-font: 'DingTalk Sans', 'DingTalk JinBuTi', "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
 }
 
+/* 3) 优雅覆盖（优先级高，但不使用 !important） */
+html, body {
+  font-family: var(--site-font);
+}
 /* body {
   font-family: 'Maple Mono CN', system-ui, Avenir, Helvetica, Arial, sans-serif;
 } */
+/* 4) 彻底强制覆盖所有元素（包括伪元素）——带 !important，确保覆盖内联 style */
+*, *::before, *::after {
+  font-family: var(--site-font) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 @keyframes border-spin {
   0% {
