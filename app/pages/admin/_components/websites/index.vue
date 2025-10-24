@@ -123,6 +123,37 @@ const category_id = ref(""); // 所属分类
 
 const toast = useToast();
 
+// 从 localStorage 恢复状态
+const restoreState = () => {
+  const savedState = localStorage.getItem("websiteFilterState");
+  if (savedState) {
+    const state = JSON.parse(savedState);
+    name.value = state.name || "";
+    category_id.value = state.category_id || "";
+    current.value = state.current || 1;
+  }
+};
+
+// 保存状态到 localStorage
+const saveState = () => {
+  const state = {
+    name: name.value,
+    category_id: category_id.value,
+    current: current.value,
+  };
+  localStorage.setItem("websiteFilterState", JSON.stringify(state));
+};
+
+// 页面加载时恢复状态
+onMounted(() => {
+  restoreState();
+});
+
+// 状态变化时保存
+watch([name, category_id, current], () => {
+  saveState();
+});
+
 // 请求分类列表
 const { data: categoryData, status: categoryLoading } = await useFetch<Response<PageResponse<CategoryList>>>(
   "/api/categorys",
@@ -150,6 +181,7 @@ const { data, refresh, status } = await useFetch<Response<PageResponse<WebsiteLi
 const handleSearch = () => {
   current.value = 1;
   refresh();
+  saveState(); // 查询后保存状态
 };
 
 // 编辑模态框状态
@@ -164,12 +196,14 @@ const handleReset = () => {
   deleteId.value = "";
   currentWebsite.value = null;
   refresh();
+  saveState(); // 重置后保存状态
 };
 
 // 分页切换回调
 const handlePageChange = (page: number) => {
   current.value = page;
   refresh();
+  saveState(); // 分页后保存状态
 };
 
 // 新增回调
@@ -365,7 +399,7 @@ const columns: TableColumn<WebsiteList>[] = [
       });
     },
     cell: ({ row }) => {
-      return h(UBadge, { color: "info", ariant: "soft" }, () => row.getValue("sort"));
+      return h(UBadge, { color: "info", variant: "soft" }, () => row.getValue("sort"));
     },
   },
   {
