@@ -10,7 +10,7 @@
           <BlurText
             :text="item.name"
             :delay="200"
-            class-name="text-xl font-semibold"
+            class-name="text-xl font-semibold category-title foolishIn"
             animate-by="letters"
             direction="top"
             :threshold="0.1"
