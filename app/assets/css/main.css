@@ -1,7 +1,8 @@
-@import "tailwindcss";
-@import "@nuxt/ui";
 /* 定义字体 */
 @import url('https://ik.imagekit.io/fontnow/font/d7735424-9620-5dcf-ac68-adc53de1bf09/result.css');
+@import "tailwindcss";
+@import "@nuxt/ui";
+
 @font-face {
   font-family: 'DingTalk Sans';
   src: url('~/assets/fonts/DingTalk Sans.ttf') format('truetype');
