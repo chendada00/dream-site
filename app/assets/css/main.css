@@ -141,6 +141,7 @@ html.light .category-title {
   box-shadow: 0 0 0 2px rgba(224, 231, 255, 0.5); /* 浅色模式边框过渡 */
   -webkit-animation: swashIn 3s infinite ease-in-out;
   animation: swashIn 3s infinite ease-in-out;
+  margin-bottom: 10px;
 }
 
 /* 深色模式（当 html 有 dark 类时） */
@@ -155,4 +156,5 @@ html.dark .category-title {
   box-shadow: 0 0 0 2px rgba(51, 65, 85, 0.5); /* 深色模式边框过渡 */
   -webkit-animation: swashIn 3s infinite ease-in-out;
   animation: swashIn 3s infinite ease-in-out;
+  margin-bottom: 10px;
 }
