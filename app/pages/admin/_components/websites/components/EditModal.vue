@@ -84,7 +84,7 @@
         <UFormField name="tags" label="站点标签" required>
           <UInputTags
             v-model="state.tags"
-            :max-length="4"
+            :max-length="10"
             placeholder="请输入站点标签"
             size="lg"
             icon="ri:price-tag-3-line"
