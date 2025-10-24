@@ -159,27 +159,4 @@ html.dark .category-title {
   margin-bottom: 10px;
 }
 
-/* 浅色模式（category-tag） */
-html.light .category-tag {
-  color: #2B6CB0;
-  background: linear-gradient(135deg, #F0F4FF 0%, #E0EAFF 100%);
-  padding: 0.1rem 0.25rem; /* 进一步减少内边距 */
-  border-radius: 9999px;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  border: 1px solid transparent;
-  background-clip: padding-box, border-box;
-  box-shadow: 0 0 0 0.5px rgba(224, 231, 255, 0.3);
-  background-color: transparent; /* 移除默认白色背景 */
-}
-/* 深色模式（category-tag） */
-html.dark .category-tag {
-  color: #A3BFFA;
-  background: linear-gradient(135deg, #2A3444 0%, #475569 100%);
-  padding: 0.1rem 0.25rem; /* 进一步减少内边距 */
-  border-radius: 9999px;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.05);
-  border: 1px solid transparent;
-  background-clip: padding-box, border-box;
-  box-shadow: 0 0 0 0.5px rgba(51, 65, 85, 0.3);
-  background-color: transparent; /* 移除默认白色背景 */
-}
+ 
