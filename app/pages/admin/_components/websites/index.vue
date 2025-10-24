@@ -120,7 +120,8 @@ const current = ref(1); // 当前页
 const pageSize = ref(10); // 每页条数
 const name = ref(""); // 站点名称
 const category_id = ref(""); // 所属分类
-const activeTab = ref("分类站点"); // 跟踪当前选中的页签，默认值为"分类站点"
+
+const toast = useToast();
 
 // 从 localStorage 恢复状态
 const restoreState = () => {
@@ -130,7 +131,6 @@ const restoreState = () => {
     name.value = state.name || "";
     category_id.value = state.category_id || "";
     current.value = state.current || 1;
-    activeTab.value = state.activeTab || "分类站点"; // 恢复页签状态
   }
 };
 
@@ -140,7 +140,6 @@ const saveState = () => {
     name: name.value,
     category_id: category_id.value,
     current: current.value,
-    activeTab: activeTab.value, // 保存页签状态
   };
   localStorage.setItem("websiteFilterState", JSON.stringify(state));
 };
@@ -152,7 +151,7 @@ onMounted(async () => {
 });
 
 // 状态变化时保存
-watch([name, category_id, current, activeTab], () => {
+watch([name, category_id, current], () => {
   saveState();
 });
 
@@ -197,7 +196,6 @@ const handleReset = async () => {
   category_id.value = "";
   deleteId.value = "";
   currentWebsite.value = null;
-  activeTab.value = "分类站点"; // 重置页签到默认值
   await refresh();
   saveState(); // 重置后保存状态
 };
