@@ -54,7 +54,7 @@
                         </UTooltip>
                       </template>
                     </div>
-                    <div class="flex gap-1 items-center text-xs text-slate-400 font-thin">
+                    <div class="category-tag flex gap-1 items-center text-xs text-slate-400 font-thin">
                       <template v-for="(tag, index) in child.tags" :key="index">
                         <UBadge color="neutral" variant="soft" class="rounded-full" size="sm">{{ tag }}</UBadge>
                       </template>
