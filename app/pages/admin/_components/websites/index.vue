@@ -144,9 +144,10 @@ const saveState = () => {
   localStorage.setItem("websiteFilterState", JSON.stringify(state));
 };
 
-// 页面加载时恢复状态
-onMounted(() => {
+// 页面加载时恢复状态并刷新数据
+onMounted(async () => {
   restoreState();
+  await refresh(); // 确保在恢复状态后刷新数据
 });
 
 // 状态变化时保存
@@ -165,7 +166,7 @@ const { data: categoryData, status: categoryLoading } = await useFetch<Response<
 // 请求列表
 const { data, refresh, status } = await useFetch<Response<PageResponse<WebsiteList>>>("/api/websites", {
   query: { current, pageSize, name, category_id },
-  watch: false,
+  watch: [current, pageSize, name, category_id], // 监听这些参数的变化
   // 处理响应数据
   onResponse: ({ response }) => {
     const { code, msg } = response._data;
@@ -178,9 +179,9 @@ const { data, refresh, status } = await useFetch<Response<PageResponse<WebsiteLi
 });
 
 // 查询回调
-const handleSearch = () => {
+const handleSearch = async () => {
   current.value = 1;
-  refresh();
+  await refresh();
   saveState(); // 查询后保存状态
 };
 
@@ -189,20 +190,20 @@ const showEditModal = ref(false);
 const currentWebsite = ref<WebsiteEdit | null>();
 
 // 重置回调
-const handleReset = () => {
+const handleReset = async () => {
   current.value = 1;
   name.value = "";
   category_id.value = "";
   deleteId.value = "";
   currentWebsite.value = null;
-  refresh();
+  await refresh();
   saveState(); // 重置后保存状态
 };
 
 // 分页切换回调
-const handlePageChange = (page: number) => {
+const handlePageChange = async (page: number) => {
   current.value = page;
-  refresh();
+  await refresh();
   saveState(); // 分页后保存状态
 };
 
