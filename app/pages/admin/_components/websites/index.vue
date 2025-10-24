@@ -125,7 +125,7 @@ const toast = useToast();
 
 // 从 localStorage 恢复状态
 const restoreState = () => {
-  const savedState = localStorage.getItem("websiteFilterState");
+  const savedState = localStorage.getItem("websiteFilterStateWebsites");
   if (savedState) {
     const state = JSON.parse(savedState);
     name.value = state.name || "";
@@ -141,7 +141,7 @@ const saveState = () => {
     category_id: category_id.value,
     current: current.value,
   };
-  localStorage.setItem("websiteFilterState", JSON.stringify(state));
+  localStorage.setItem("websiteFilterStateWebsites", JSON.stringify(state));
 };
 
 // 页面加载时恢复状态并刷新数据

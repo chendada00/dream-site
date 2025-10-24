@@ -29,14 +29,16 @@ const items = ref<TabsItem[]>([
   },
 ]);
 
-const activeTab = ref<TabsItem["label"]>("分类站点"); // 默认选中“分类站点”
+const activeTab = ref<TabsItem["label"]>("网站分类"); // 默认选中“网站分类”
 
 // 从 localStorage 恢复状态
 const restoreState = () => {
-  const savedState = localStorage.getItem("websiteFilterState");
+  const savedState = localStorage.getItem("tabState");
   if (savedState) {
     const state = JSON.parse(savedState);
-    activeTab.value = state.activeTab || "分类站点"; // 恢复页签状态
+    activeTab.value = state.activeTab || "网站分类"; // 恢复页签状态，默认为“网站分类”
+  } else {
+    activeTab.value = "网站分类"; // 缓存为空时默认选中“网站分类”
   }
 };
 
@@ -45,7 +47,7 @@ const saveState = () => {
   const state = {
     activeTab: activeTab.value,
   };
-  localStorage.setItem("websiteFilterState", JSON.stringify(state));
+  localStorage.setItem("tabState", JSON.stringify(state));
 };
 
 // 页面加载时恢复状态
