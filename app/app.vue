@@ -59,7 +59,7 @@ useHead({
   link: [{ rel: "icon", type: "image/x-icon", href: "favicon.ico" }],
   meta: [
     { name: "keywords", content: "导航,网站,伴随,伴随的小站" },
-    { name: "description", content: "伴随的个人站点导航！" },
+    { name: "description", content: "伴随の个人站点导航！" },
   ],
 });
 </script>
