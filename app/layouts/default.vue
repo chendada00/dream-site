@@ -9,14 +9,14 @@
     <Footer />
 
     <div
-        class="fixed bottom-10 right-10 z-50 flex flex-col items-end space-y-3"
+        class="fixed bottom-10 right-10 z-50 flex flex-col items-center space-y-3"
     >
       <ClientOnly>
         <BackTop />
       </ClientOnly>
       <ClientOnly>
         <UButton
-            :icon="isAllCollapsed ? 'material-symbols:unfold-less-rounded' : 'material-symbols:unfold-more'"
+            :icon="isAllCollapsed ? 'i-mingcute-unfold-vertical-fill' : 'mingcute:fold-vertical-fill'"
             size="xl"
             color="primary"
             variant="solid"
