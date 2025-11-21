@@ -2,12 +2,12 @@
   <Transition name="fade">
     <div v-if="isVisible">
       <UButton
-        icon="i-heroicons-arrow-up-20-solid"
+        icon="line-md:upload-loop"
         color="primary"
-        size="xl"
+        size="md"
         square
         variant="solid"
-        class="fixed bottom-14 right-8 z-50 shadow-lg transition-all duration-300 hover:scale-110 cursor-pointer rounded-full"
+        class="z-50 shadow-lg transition-all duration-300 hover:scale-110 cursor-pointer rounded-full"
         @click="scrollToTop"
         :ui="{
           leadingIcon: '!size-5',

@@ -19,10 +19,10 @@
       :PRESSURE="0.1"
       :PRESSURE_ITERATIONS="20"
       :CURL="3"
-      :SPLAT_RADIUS="0.05"
+      :SPLAT_RADIUS="0.01"
       :SPLAT_FORCE="3000"
       :SHADING="true"
-      :COLOR_UPDATE_SPEED="10"
+      :COLOR_UPDATE_SPEED="5"
       :BACK_COLOR="{ r: 0.5, g: 0, b: 0 }"
       :TRANSPARENT="true"
     />
