@@ -24,8 +24,8 @@
         </div>
 
         <div
-            v-show="!collapsedStates[item.id]"
-            v-if="item.ds_websites?.length"
+
+            v-if="item.ds_websites?.length && !collapsedStates[item.id]"
             class="grid gap-5 w-full justify-center grid-cols-[repeat(auto-fill,minmax(20rem,1fr))] mt-2"
         >
           <AnimatedContent
