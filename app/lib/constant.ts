@@ -15,13 +15,13 @@ export const FooterRecord: Social[] = [
  * @description: 社交图标
  */
 export const FooterSocial: Social[] = [
-  // {
-  //   icon: 'ri:bar-chart-2-line',
-  //   url: 'https://umami.baiwumm.com/share/UHoy3xMybN92HMxF',
-  //   tip: '网站统计'
-  // },
+  {
+      icon: 'ri:bar-chart-2-line',
+      url: 'https://um.baiwumm.com/share/3kXaMUYbKgUFkphU',
+      tip: '网站统计'
+  },
   { icon: 'i-ri-github-line', url: 'https://github.com/chendada00/', tip: 'Github' },
   // { icon: 'i-ri-mail-line', url: 'mailto:me@baiwumm.com', tip: 'Email' },
-  { icon: 'i-ri-quill-pen-line', url: 'https://blog.伴随.cn', tip: '博客' },
+  { icon: 'i-ri-quill-pen-line', url: 'https://blog.伴随.cn', tip: '博客' }
   // { icon: 'mdi:api', url: 'https://api.baiwumm.com', tip: 'Easy Api' }
 ]
