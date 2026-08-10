@@ -8,7 +8,7 @@ import { DatabaseFill, Plus } from '@gravity-ui/icons'
 import { Button, Typography } from '@heroui/react'
 import { motion } from 'motion/react'
 import { useRouter } from 'next/navigation'
-import { use, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import AlertContent from '@/components/AlertContent'
 import BlurFade from '@/components/BlurFade'
@@ -35,11 +35,10 @@ const cardGridVariants: Variants = {
 const cardTransition = { duration: 0.4, ease: 'easeOut' } as const
 
 interface HomeContentProps {
-  dataPromise: Promise<Category[]>
+  data: Category[]
 }
 
-export default function HomeContent({ dataPromise }: HomeContentProps) {
-  const data = use(dataPromise)
+export default function HomeContent({ data }: HomeContentProps) {
   const router = useRouter()
   const list = useMemo(() => data ?? [], [data])
 

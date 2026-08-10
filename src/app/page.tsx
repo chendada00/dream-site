@@ -17,7 +17,14 @@ export const dynamic = 'force-dynamic'
 export default function Home() {
   return (
     <Suspense fallback={<SkeletonContent />}>
-      <HomeContent dataPromise={fetchHomeData()} />
+      <HomeData />
     </Suspense>
   )
+}
+
+// 取数放在 async Server Component 内：Suspense 负责加载态，
+// 客户端导航时以已 resolve 的数据传给客户端组件，避免 promise 挂起
+async function HomeData() {
+  const data = await fetchHomeData()
+  return <HomeContent data={data} />
 }
