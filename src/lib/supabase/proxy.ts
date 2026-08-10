@@ -18,6 +18,11 @@ export async function updateSession(request: NextRequest) {
     return supabaseResponse
   }
 
+  // OG 图片路由直接放行（无扩展名，会被 matcher 拦截导致分享时拿不到图）
+  if (path === '/opengraph-image') {
+    return supabaseResponse
+  }
+
   const url = request.nextUrl.clone()
   const code = url.searchParams.get('code')
 

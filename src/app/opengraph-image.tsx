@@ -15,10 +15,14 @@ export const contentType = 'image/png'
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://nav.baiwumm.com'
 const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || 'Better Nav'
 const APP_TITLE = process.env.NEXT_PUBLIC_APP_TITLE || '一个把常用网址收拾得干干净净的小站'
-const APP_DESC = process.env.NEXT_PUBLIC_APP_DESC || '把常用网址放在一起，打开就能用。'
 const APP_HOST = APP_URL.replace(/^https?:\/\//, '').replace(/\/$/, '')
 const AUTHOR_NAME = process.env.NEXT_PUBLIC_AUTHOR_NAME || '白雾茫茫丶'
 const AUTHOR_ROLE = process.env.NEXT_PUBLIC_AUTHOR_ROLE || '独立开发者'
+const TECH_TAGS = ['React', 'Next.js', 'HeroUI', 'Tailwind CSS']
+
+// 主题色：取自 globals.css --accent: oklch(14.48% 0 0) → #0a0a0a
+const THEME_COLOR = '#0a0a0a'
+const THEME_SOFT = '#E7E7E7' // 主题色浅色变体，用作标签底色
 
 const ASSET_MIME_TYPES: Record<string, string> = {
   '.jpg': 'image/jpeg',
@@ -27,12 +31,16 @@ const ASSET_MIME_TYPES: Record<string, string> = {
   '.webp': 'image/webp',
 }
 
+// Vercel 最佳实践：静态 I/O 提升到模块级，只读一次，避免每次请求重复 readFile
+const logoAsset = publicAssetToDataUrl('logo.png')
+const previewAsset = publicAssetToDataUrl('light.png')
+const avatarAsset = publicAssetToDataUrl('avatar.jpg')
+
 export default async function OpenGraphImage() {
-  const [bgUrl, logoUrl, previewUrl, avatarUrl] = await Promise.all([
-    publicAssetToDataUrl('og-bg.jpg'),
-    publicAssetToDataUrl('logo.png'),
-    publicAssetToDataUrl('og-preview.png'),
-    publicAssetToDataUrl('avatar.jpg'),
+  const [logoUrl, previewUrl, avatarUrl] = await Promise.all([
+    logoAsset,
+    previewAsset,
+    avatarAsset,
   ])
 
   return new ImageResponse(
@@ -44,62 +52,22 @@ export default async function OpenGraphImage() {
           display: 'flex',
           position: 'relative',
           overflow: 'hidden',
-          background: '#F8FAFC',
-          color: '#0F172A',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%)',
+          color: '#1A1A1A',
         }}
       >
-        <img
-          aria-hidden="true"
-          alt=""
-          height={630}
-          src={bgUrl}
-          width={1200}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-          }}
-        />
-        <div
-          style={{
-            display: 'flex',
-            position: 'absolute',
-            inset: 0,
-            background:
-              'linear-gradient(90deg, rgba(15, 23, 42, 0.18) 0%, rgba(15, 23, 42, 0.08) 36%, rgba(15, 23, 42, 0) 60%)',
-          }}
-        />
-        <div
-          style={{
-            display: 'flex',
-            position: 'absolute',
-            inset: '-20% auto auto -8%',
-            width: '420px',
-            height: '420px',
-            borderRadius: '9999px',
-            background: 'rgba(148, 163, 184, 0.14)',
-          }}
-        />
-        <div
-          style={{
-            display: 'flex',
-            position: 'absolute',
-            inset: 'auto -12% -22% auto',
-            width: '480px',
-            height: '480px',
-            borderRadius: '9999px',
-            background: 'rgba(15, 23, 42, 0.06)',
-          }}
-        />
         <div
           style={{
             position: 'relative',
-            width: '100%',
-            height: '100%',
+            width: '1104px',
+            height: '534px',
             display: 'flex',
-            padding: '48px',
+            borderRadius: '24px',
+            background: 'rgba(255, 255, 255, 0.95)',
+            boxShadow: '0 25px 80px rgba(0, 0, 0, 0.1)',
+            padding: '41px',
             boxSizing: 'border-box',
             gap: '36px',
           }}
@@ -121,11 +89,12 @@ export default async function OpenGraphImage() {
                 gap: '12px',
                 alignSelf: 'flex-start',
                 borderRadius: '9999px',
-                border: '1px solid rgba(255, 255, 255, 0.28)',
+                border: '1px solid rgba(255, 255, 255, 0.7)',
                 background:
-                  'linear-gradient(135deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.18) 100%)',
+                  'linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.35) 100%)',
+                backdropFilter: 'blur(12px)',
                 boxShadow:
-                  '0 12px 28px rgba(15, 23, 42, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+                  '0 8px 24px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
                 padding: '12px 18px',
               }}
             >
@@ -149,7 +118,7 @@ export default async function OpenGraphImage() {
                     fontSize: 22,
                     fontWeight: 800,
                     lineHeight: 1.1,
-                    color: 'rgba(255, 255, 255, 0.95)',
+                    color: '#1A1A1A',
                   }}
                 >
                   {APP_NAME}
@@ -166,35 +135,43 @@ export default async function OpenGraphImage() {
                 marginTop: '-24px',
               }}
             >
+              <h1
+                style={{
+                  margin: 0,
+                  fontSize: 38,
+                  fontWeight: 900,
+                  lineHeight: 1.2,
+                  letterSpacing: '-0.04em',
+                  color: '#1A1A1A',
+                }}
+              >
+                {APP_TITLE}
+              </h1>
               <div
                 style={{
                   display: 'flex',
-                  flexDirection: 'column',
-                  gap: '16px',
+                  flexWrap: 'wrap',
+                  gap: '10px',
                 }}
               >
-                <h1
-                  style={{
-                    margin: 0,
-                    fontSize: 36,
-                    fontWeight: 900,
-                    lineHeight: 1.2,
-                    letterSpacing: '-0.04em',
-                    color: 'rgba(255, 255, 255, 0.96)',
-                  }}
-                >
-                  {APP_TITLE}
-                </h1>
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: 22,
-                    lineHeight: 1.65,
-                    color: 'rgba(255, 255, 255, 0.72)',
-                  }}
-                >
-                  {APP_DESC}
-                </p>
+                {TECH_TAGS.map(tag => (
+                  <span
+                    key={tag}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '6px 14px',
+                      borderRadius: '9999px',
+                      background: THEME_SOFT,
+                      color: THEME_COLOR,
+                      fontSize: 14,
+                      fontWeight: 600,
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
 
@@ -239,7 +216,7 @@ export default async function OpenGraphImage() {
                   style={{
                     fontSize: 18,
                     fontWeight: 700,
-                    color: 'rgba(255, 255, 255, 0.92)',
+                    color: '#1A1A1A',
                   }}
                 >
                   {AUTHOR_NAME}
@@ -247,7 +224,7 @@ export default async function OpenGraphImage() {
                 <span
                   style={{
                     fontSize: 14,
-                    color: 'rgba(255, 255, 255, 0.64)',
+                    color: '#666666',
                   }}
                 >
                   {AUTHOR_ROLE}
@@ -263,19 +240,20 @@ export default async function OpenGraphImage() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              padding: '0 16px 16px 0',
+              boxSizing: 'border-box',
             }}
           >
             <div
               style={{
                 width: '100%',
-                height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
-                borderRadius: '32px',
+                borderRadius: '16px',
                 overflow: 'hidden',
-                background: 'rgba(255, 255, 255, 0.78)',
+                background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
                 border: '1px solid rgba(15, 23, 42, 0.08)',
-                boxShadow: '0 28px 80px rgba(15, 23, 42, 0.14)',
+                boxShadow: '0 28px 80px rgba(15, 23, 42, 0.12)',
               }}
             >
               <div
@@ -284,7 +262,7 @@ export default async function OpenGraphImage() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   padding: '12px 16px',
-                  background: 'rgba(255, 255, 255, 0.72)',
+                  background: 'rgba(255, 255, 255, 0.75)',
                   borderBottom: '1px solid rgba(15, 23, 42, 0.08)',
                   position: 'relative',
                 }}
@@ -335,7 +313,7 @@ export default async function OpenGraphImage() {
                     height: '34px',
                     padding: '0 18px',
                     borderRadius: '9999px',
-                    background: '#F8FAFC',
+                    background: '#F1F5F9',
                     border: '1px solid rgba(15, 23, 42, 0.06)',
                     fontSize: 16,
                     color: '#64748B',
@@ -348,8 +326,8 @@ export default async function OpenGraphImage() {
               <div
                 style={{
                   display: 'flex',
-                  flex: 1,
-                  padding: '18px',
+                  padding: '15px',
+                  alignItems: 'flex-start',
                   background: '#FFFFFF',
                 }}
               >
@@ -360,8 +338,8 @@ export default async function OpenGraphImage() {
                   width={560}
                   style={{
                     width: '100%',
-                    height: '100%',
-                    borderRadius: '20px',
+                    height: '259px',
+                    borderRadius: '12px',
                     objectFit: 'cover',
                     objectPosition: 'top center',
                     border: '1px solid rgba(15, 23, 42, 0.08)',
