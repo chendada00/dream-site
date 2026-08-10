@@ -20,9 +20,11 @@ import type { FC } from 'react'
 interface WebsiteCardProps {
   data: Website
   handleClick: (id: string) => Promise<void>
+  /** 首屏图片预加载：首页视口内的卡片传 true */
+  priority?: boolean
 }
 
-const WebsiteCard: FC<WebsiteCardProps> = memo(({ data, handleClick }) => {
+const WebsiteCard: FC<WebsiteCardProps> = memo(({ data, handleClick, priority = false }) => {
   const { id, name, desc, vpn, logo, tags, pinned, recommend, url, commonlyUsed } = data || {}
   return (
     <Link href={url} target="_blank">
@@ -38,6 +40,7 @@ const WebsiteCard: FC<WebsiteCardProps> = memo(({ data, handleClick }) => {
                     <Image
                       alt={name}
                       fill
+                      priority={priority}
                       src={generateLogoUrl(logo)}
                       className="object-contain rounded-lg"
                     />

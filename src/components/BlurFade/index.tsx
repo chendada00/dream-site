@@ -64,7 +64,6 @@ export default function BlurFade({
     <motion.div
       ref={ref}
       animate={isInView ? 'visible' : 'hidden'}
-      exit="hidden"
       initial="hidden"
       transition={{
         delay: 0.04 + delay,
@@ -73,7 +72,6 @@ export default function BlurFade({
       }}
       variants={combinedVariants}
       className={className}
-      style={{ willChange: 'transform, opacity, filter' }}
       {...props}
     >
       {children}

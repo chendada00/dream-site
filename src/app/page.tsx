@@ -21,8 +21,24 @@ import useRequest from '@/hooks/use-request'
 import { getSupabaseBrowserClient } from '@/lib/supabase/client'
 
 import type { Category, PaginatingResponse } from '@/types'
+import type { Variants } from 'motion/react'
 
-const MotionWebsiteCard = motion.create(WebsiteCard)
+// 首屏视口内可见的卡片数量（20rem 最小列宽，宽屏约 4 列 × 1 行）
+const FIRST_SCREEN_CARD_COUNT = 4
+
+// 卡片级出场动画：y + opacity 逐卡 stagger 淡入（blur 由 BlurFade 区块层负责，避免重复开销）
+const cardVariants: Variants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: { y: 0, opacity: 1 },
+}
+
+// 网格容器作为变体节点：继承 BlurFade 的 initial/animate，通过 staggerChildren 编排子卡片
+const cardGridVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.04 } },
+}
+
+const cardTransition = { duration: 0.4, ease: 'easeOut' } as const
 
 export default function Home() {
   const supabase = getSupabaseBrowserClient()
@@ -43,9 +59,15 @@ export default function Home() {
   }
 
   const handleClick = useCallback(async (id: string) => {
-    await supabase.rpc('increment_visit_count', {
-      row_id: id,
-    })
+    // 计数失败不应影响跳转，且避免产生未处理的 Promise rejection
+    try {
+      await supabase.rpc('increment_visit_count', {
+        row_id: id,
+      })
+    }
+    catch {
+      // 忽略计数失败
+    }
   }, [supabase])
 
   if (isInitialLoading) {
@@ -82,30 +104,31 @@ export default function Home() {
 
   return (
     <div className="space-y-6">
-      {list.map(({ id, name, websites }) => {
+      {list.map(({ id, name, websites }, sectionIdx) => {
         return (
           <BlurFade key={id} inView className="flex flex-col gap-2">
             <h1 className="text-lg font-black">{name}</h1>
             {websites?.length
               ? (
-                  <div className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(20rem,1fr))]">
+                  <motion.div
+                    variants={cardGridVariants}
+                    className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(20rem,1fr))]"
+                  >
                     {websites.map((item, idx) => (
-                      <MotionWebsiteCard
+                      <motion.div
                         key={item.id}
-                        data={item}
-                        handleClick={handleClick}
-                        transition={{
-                          delay: 0.04 * idx,
-                          duration: 0.4,
-                          ease: 'easeOut',
-                        }}
-                        variants={{
-                          hidden: { y: 20, opacity: 0, filter: 'blur(6px)' },
-                          visible: { y: 0, opacity: 1, filter: 'none' },
-                        }}
-                      />
+                        transition={cardTransition}
+                        variants={cardVariants}
+                        className="h-full"
+                      >
+                        <WebsiteCard
+                          data={item}
+                          handleClick={handleClick}
+                          priority={sectionIdx === 0 && idx < FIRST_SCREEN_CARD_COUNT}
+                        />
+                      </motion.div>
                     ))}
-                  </div>
+                  </motion.div>
                 )
               : (
                   <div className="flex justify-center p-4">
