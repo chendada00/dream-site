@@ -71,7 +71,7 @@ export default function HomeContent({ data }: HomeContentProps) {
       {list.map(({ id, name, websites }, sectionIdx) => {
         return (
           <BlurFade key={id} inView className="flex flex-col gap-2">
-            <h1 className="text-lg font-black">{name}</h1>
+            <Typography type="h1" className="text-lg font-black tracking-normal">{name}</Typography>
             {websites?.length
               ? (
                   <motion.div

@@ -10,6 +10,7 @@ import {
   Label,
   Separator,
   Spinner,
+  Typography,
   useOverlayState,
 } from '@heroui/react'
 import { useState } from 'react'
@@ -83,7 +84,7 @@ const UserMenu: FC<UserMenuProps> = ({ user }) => {
               </Avatar.Fallback>
             </Avatar>
             <div className="flex flex-col space-y-1 min-w-0">
-              <p className="font-black">{name}</p>
+              <Typography type="body" className="text-sm font-black leading-normal">{name}</Typography>
               <Description className="truncate">
                 {user?.email}
               </Description>

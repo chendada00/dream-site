@@ -29,6 +29,7 @@ import {
   Spinner,
   TextField,
   toast,
+  Typography,
 } from '@heroui/react'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -156,7 +157,7 @@ export default function Login() {
               <Image alt="Logo" fill src="/logo-dark.svg" className="hidden object-contain dark:block" />
             </div>
             <div className="flex flex-col">
-              <p className="text-lg font-bold">{process.env.NEXT_PUBLIC_APP_NAME}</p>
+              <Typography type="body" weight="bold" className="text-lg leading-normal">{process.env.NEXT_PUBLIC_APP_NAME}</Typography>
               <Description>{process.env.NEXT_PUBLIC_APP_TITLE}</Description>
             </div>
           </div>
