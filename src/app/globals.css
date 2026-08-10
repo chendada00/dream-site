@@ -122,9 +122,12 @@
   }
 }
 
-/* 路由切换动画：方向感知滑动，新/旧视图并行过渡 */
+/* 路由切换动画：方向感知滑动，先退出旧视图、再进入新视图 */
 @theme {
-  --view-duration: 320ms;
+  --view-duration-exit: 200ms;
+  --view-duration-enter: 220ms;
+  --view-delay-enter: var(--view-duration-exit);
+  /* 新视图的延迟 = 旧视图的持续时间 */
 }
 
 /* 前进：新视图从右侧滑入，旧视图向左轻移淡出 */
@@ -147,7 +150,7 @@
   }
 
   to {
-    opacity: 0.4;
+    opacity: 0;
     transform: translateX(-16px);
   }
 }
@@ -172,27 +175,27 @@
   }
 
   to {
-    opacity: 0.4;
+    opacity: 0;
     transform: translateX(16px);
   }
 }
 
-/* 默认按前进方向过渡 */
+/* 默认按前进方向过渡：旧视图先退出，新视图随后进入 */
 ::view-transition-new(blur-slide) {
-  animation: var(--view-duration) ease-out both view-enter-forward;
+  animation: var(--view-duration-enter) ease-out var(--view-delay-enter) both view-enter-forward;
 }
 
 ::view-transition-old(blur-slide) {
-  animation: var(--view-duration) ease-in both view-exit-forward;
+  animation: var(--view-duration-exit) ease-in both view-exit-forward;
 }
 
 /* 浏览器前进/后退时（html[data-nav-dir='backward']）反向滑动 */
 html[data-nav-dir='backward']::view-transition-new(blur-slide) {
-  animation: var(--view-duration) ease-out both view-enter-backward;
+  animation: var(--view-duration-enter) ease-out var(--view-delay-enter) both view-enter-backward;
 }
 
 html[data-nav-dir='backward']::view-transition-old(blur-slide) {
-  animation: var(--view-duration) ease-in both view-exit-backward;
+  animation: var(--view-duration-exit) ease-in both view-exit-backward;
 }
 
 /* 系统开启减弱动效时禁用转场动画 */
