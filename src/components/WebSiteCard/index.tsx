@@ -12,6 +12,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { memo } from 'react'
 
+import { getSupabaseBrowserClient } from '@/lib/supabase/client'
 import { generateLogoUrl } from '@/lib/utils'
 
 import type { Website } from '@/types'
@@ -19,17 +20,28 @@ import type { FC } from 'react'
 
 interface WebsiteCardProps {
   data: Website
-  handleClick: (id: string) => Promise<void>
   /** 首屏图片预加载：首页视口内的卡片传 true */
   priority?: boolean
 }
 
-const WebsiteCard: FC<WebsiteCardProps> = memo(({ data, handleClick, priority = false }) => {
+const WebsiteCard: FC<WebsiteCardProps> = memo(({ data, priority = false }) => {
   const { id, name, desc, vpn, logo, tags, pinned, recommend, url, commonlyUsed } = data || {}
+
+  const handleClick = async () => {
+    // 计数失败不影响跳转，且避免产生未处理的 Promise rejection
+    try {
+      await getSupabaseBrowserClient().rpc('increment_visit_count', {
+        row_id: id,
+      })
+    }
+    catch {
+      // 忽略计数失败
+    }
+  }
   return (
     <Link href={url} target="_blank">
       <Card
-        onClick={() => handleClick(id)}
+        onClick={handleClick}
         className={cn('h-full transition-transform duration-300 hover:-translate-y-1.5 justify-between')}
       >
         <Card.Header>
