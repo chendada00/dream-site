@@ -12,6 +12,7 @@ import { useMemo } from 'react'
 
 import AlertContent from '@/components/AlertContent'
 import BlurFade from '@/components/BlurFade'
+import CategoryIndicator from '@/components/CategoryIndicator'
 import WebsiteCard from '@/components/WebSiteCard'
 
 import type { Category } from '@/types'
@@ -67,46 +68,49 @@ export default function HomeContent({ data }: HomeContentProps) {
   }
 
   return (
-    <div className="space-y-6">
-      {list.map(({ id, name, websites }, sectionIdx) => {
-        return (
-          <BlurFade key={id} inView className="flex flex-col gap-2">
-            <Typography type="h1" className="text-lg font-black tracking-normal">{name}</Typography>
-            {websites?.length
-              ? (
-                  <motion.div
-                    variants={cardGridVariants}
-                    className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(20rem,1fr))]"
-                  >
-                    {websites.map((item, idx) => (
-                      <motion.div
-                        key={item.id}
-                        transition={cardTransition}
-                        variants={cardVariants}
-                        className="h-full"
-                      >
-                        <WebsiteCard
-                          data={item}
-                          priority={sectionIdx === 0 && idx < FIRST_SCREEN_CARD_COUNT}
-                        />
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                )
-              : (
-                  <div className="flex justify-center p-4">
-                    <AlertContent
-                      title="暂无网站数据"
-                      actionText="添加网站"
-                      buttonAction={goAdmin}
-                      description="该分类还没有任何网站，请前往后台进行添加。"
-                      status="accent"
-                    />
-                  </div>
-                )}
-          </BlurFade>
-        )
-      })}
-    </div>
+    <>
+      <div className="space-y-6">
+        {list.map(({ id, name, websites }, sectionIdx) => {
+          return (
+            <BlurFade key={id} id={`cat-${id}`} inView className="flex flex-col gap-2 scroll-mt-24">
+              <Typography type="h1" className="text-lg font-black tracking-normal">{name}</Typography>
+              {websites?.length
+                ? (
+                    <motion.div
+                      variants={cardGridVariants}
+                      className="grid gap-4 grid-cols-[repeat(auto-fill,minmax(20rem,1fr))]"
+                    >
+                      {websites.map((item, idx) => (
+                        <motion.div
+                          key={item.id}
+                          transition={cardTransition}
+                          variants={cardVariants}
+                          className="h-full"
+                        >
+                          <WebsiteCard
+                            data={item}
+                            priority={sectionIdx === 0 && idx < FIRST_SCREEN_CARD_COUNT}
+                          />
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  )
+                : (
+                    <div className="flex justify-center p-4">
+                      <AlertContent
+                        title="暂无网站数据"
+                        actionText="添加网站"
+                        buttonAction={goAdmin}
+                        description="该分类还没有任何网站，请前往后台进行添加。"
+                        status="accent"
+                      />
+                    </div>
+                  )}
+            </BlurFade>
+          )
+        })}
+      </div>
+      <CategoryIndicator categories={list} />
+    </>
   )
 }
