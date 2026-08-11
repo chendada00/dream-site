@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.8.1](https://github.com/baiwumm/better-nav/compare/3.8.0...3.8.1) (2026-08-11)
+
+### 🎫 Chores | 其他更新
+
+* **deps:** 升级 HeroUI 至 3.2.4 并更新 Agent 文档索引 ([ba42748](https://github.com/baiwumm/better-nav/commit/ba427488ee386295ecb1a578189dfad940afc2e4))
+
 ## [3.8.0](https://github.com/baiwumm/better-nav/compare/3.7.1...3.8.0) (2026-08-11)
 
 ### ✨ Features | 新功能
