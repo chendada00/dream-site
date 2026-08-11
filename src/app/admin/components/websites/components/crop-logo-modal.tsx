@@ -8,7 +8,7 @@
 'use client'
 import { Crop } from '@gravity-ui/icons'
 import { Button, Modal } from '@heroui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Cropper from 'react-easy-crop'
 
 import { getCroppedImg } from '@/lib/crop-image'
@@ -33,6 +33,20 @@ const CropLogoModal: FC<CropLogoModalProps> = ({ state, image, setInnerFile }) =
   const [zoom, setZoom] = useState(1)
   const [rotation, setRotation] = useState(0)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
+  const [mediaSize, setMediaSize] = useState<{ width: number; height: number } | null>(null)
+
+  // 读取图片原始宽高，让裁剪框跟随原图比例，避免非正方形 Logo 裁剪不全
+  useEffect(() => {
+    if (!image) {
+      setMediaSize(null)
+      return
+    }
+    const img = new Image()
+    img.onload = () => setMediaSize({ width: img.naturalWidth, height: img.naturalHeight })
+    img.src = image
+  }, [image])
+
+  const aspect = mediaSize ? mediaSize.width / mediaSize.height : 1
 
   /**
    * @description: 裁剪完成
@@ -79,9 +93,9 @@ const CropLogoModal: FC<CropLogoModalProps> = ({ state, image, setInnerFile }) =
           </Modal.Header>
           <Modal.Body className="py-4 px-1">
             <div className="relative h-100">
-              {image && (
+              {image && mediaSize && (
                 <Cropper
-                  aspect={1}
+                  aspect={aspect}
                   crop={crop}
                   image={image}
                   maxZoom={MAX_ZOOM}
