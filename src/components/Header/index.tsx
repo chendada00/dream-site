@@ -10,6 +10,7 @@ import { HouseFill, LogoGithub } from '@gravity-ui/icons'
 import { Button, Tooltip } from '@heroui/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { memo } from 'react'
 
 import { ShimmeringText } from '@/components/ShimmeringText'
 import ThemeSwitcher from '@/components/ThemeSwitcher'
@@ -91,4 +92,4 @@ const Header: FC = () => {
     </header>
   )
 }
-export default Header
+export default memo(Header)

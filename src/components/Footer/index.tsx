@@ -7,6 +7,7 @@
  */
 import { Chip, cn, Description, Link, Separator } from '@heroui/react'
 import Image from 'next/image'
+import { memo } from 'react'
 
 import { ShimmeringText } from '@/components/ShimmeringText'
 import pkg from '#/package.json'
@@ -96,4 +97,4 @@ const Footer: FC = () => {
     </footer>
   )
 }
-export default Footer
+export default memo(Footer)

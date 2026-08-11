@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 
 import type React from 'react'
 import type { ChangeEvent, DragEvent, InputHTMLAttributes } from 'react'
@@ -90,23 +90,21 @@ export function useFileUpload(options: FileUploadOptions = {}): [FileUploadState
 
   const inputRef = useRef<HTMLInputElement>(null)
 
+  // 解析 accept 为类型集合，避免每次校验重复 split（accept 变化时才重新解析）
+  const acceptedTypes = useMemo(
+    () => (accept === '*' ? null : accept.split(',').map(type => type.trim()).filter(Boolean)),
+    [accept],
+  )
+
   const validateFile = useCallback(
     (file: File | FileMetadata): string | null => {
-      if (file instanceof File) {
-        if (file.size > maxSize) {
-          return `文件 "${file.name}" 大小超过 ${formatBytes(maxSize)} 限制.`
-        }
-      }
-      else {
-        if (file.size > maxSize) {
-          return `文件 "${file.name}" 大小超过 ${formatBytes(maxSize)} 限制.`
-        }
+      if (file.size > maxSize) {
+        return `文件 "${file.name}" 大小超过 ${formatBytes(maxSize)} 限制.`
       }
 
-      if (accept !== '*') {
-        const acceptedTypes = accept.split(',').map(type => type.trim())
+      if (acceptedTypes) {
         const fileType = file instanceof File ? file.type || '' : file.type
-        const fileExtension = `.${file instanceof File ? file.name.split('.').pop() : file.name.split('.').pop()}`
+        const fileExtension = `.${file.name.split('.').pop()}`
 
         const isAccepted = acceptedTypes.some((type) => {
           if (type.startsWith('.')) {
@@ -120,13 +118,13 @@ export function useFileUpload(options: FileUploadOptions = {}): [FileUploadState
         })
 
         if (!isAccepted) {
-          return `文件 "${file instanceof File ? file.name : file.name}" 类型不正确.`
+          return `文件 "${file.name}" 类型不正确.`
         }
       }
 
       return null
     },
-    [accept, maxSize],
+    [acceptedTypes, maxSize],
   )
 
   const createPreview = useCallback((file: File | FileMetadata): string | undefined => {

@@ -20,20 +20,26 @@ const TimeAndLunar: FC = memo(() => {
 
   useEffect(() => {
     let lastDate = ''
+    // 记录上一帧的秒值：仅在秒变化时 setState，避免每帧（60fps）触发 React 重渲染
+    let lastSecond = -1
     let frameId: number
 
     const tick = () => {
       const current = new Date()
-      setNow(current)
 
-      const dateStr = formatDate(current)
-      if (dateStr !== lastDate) {
-        lastDate = dateStr
+      if (current.getSeconds() !== lastSecond) {
+        lastSecond = current.getSeconds()
+        setNow(current)
 
-        const l = Lunar.fromDate(current)
-        setLunar(
-          `${l.getYearInGanZhi()}年 ${l.getMonthInGanZhi()}月 ${l.getDayInGanZhi()}日 ${l.getMonthInChinese()}月${l.getDayInChinese()} 星期${l.getWeekInChinese()}`,
-        )
+        const dateStr = formatDate(current)
+        if (dateStr !== lastDate) {
+          lastDate = dateStr
+
+          const l = Lunar.fromDate(current)
+          setLunar(
+            `${l.getYearInGanZhi()}年 ${l.getMonthInGanZhi()}月 ${l.getDayInGanZhi()}日 ${l.getMonthInChinese()}月${l.getDayInChinese()} 星期${l.getWeekInChinese()}`,
+          )
+        }
       }
 
       frameId = requestAnimationFrame(tick)

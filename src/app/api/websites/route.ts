@@ -86,6 +86,12 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const supabase = await getSupabaseServerClient()
+    // 路由内二次鉴权（middleware 的 getClaims 仅解码 JWT，不验证有效性）
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    if (userError || !user) {
+      return NextResponse.json(responseMessage(null, '未登录', -1))
+    }
+
     // 解析请求体
     const body = await request.json() // 如果是 JSON 数据
 

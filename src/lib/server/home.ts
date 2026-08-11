@@ -1,3 +1,6 @@
+import { cache } from 'react'
+
+import { sortWebsites } from '@/lib/server/sort'
 /*
  * @Author: 白雾茫茫丶<baiwumm.com>
  * @Date: 2026-08-10 10:00:00
@@ -10,8 +13,9 @@ import type { Category } from '@/types'
 /**
  * @description: 首页数据（全部分类 + 网站），服务端直接查询
  * 查询与排序逻辑与 /api/categorys 保持一致，供 RSC 页面复用
+ * React.cache 保证同一请求内多处调用只查一次库
  */
-export async function fetchHomeData(): Promise<Category[]> {
+export const fetchHomeData = cache(async (): Promise<Category[]> => {
   const supabase = await getSupabaseServerClient()
 
   // 查询 sql
@@ -33,23 +37,9 @@ export async function fetchHomeData(): Promise<Category[]> {
   const list = data ?? []
 
   list.forEach((category: Category) => {
-    category?.websites.sort((a, b) => {
-      // 2. 再按 pinned 降序 (true 排在前面)
-      if (a.pinned !== b.pinned)
-        return b.pinned ? 1 : -1
-
-      // 1. 先按 sort 降序 (b - a)
-      if (b.sort !== a.sort)
-        return b.sort - a.sort
-
-      // 3. 然后按 recommend 降序 (true 排在前面)
-      if (a.recommend !== b.recommend)
-        return b.recommend ? 1 : -1
-
-      // 4. 最后按 created_at 降序 (新日期在前)
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    })
+    if (category?.websites)
+      sortWebsites(category.websites)
   })
 
   return list
-}
+})

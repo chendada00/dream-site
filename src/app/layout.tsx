@@ -7,6 +7,7 @@ import { ThemeProvider } from 'next-themes'
 
 import { GoogleUtilities, MicrosoftClarity } from '@/components/Analytics'
 import FullLoading from '@/components/FullLoading'
+import MapleMonoFont from '@/components/MapleMonoFont'
 import pkg from '#/package.json'
 
 import Provider from './Provider'
@@ -68,7 +69,6 @@ export default function RootLayout({
       <head>
         <meta name="version" content={pkg.version} />
         <meta name="apple-mobile-web-app-title" content={APP_NAME} />
-        <link href="https://cn-font.claude-code-best.win/packages/maple-mono-cn/dist/MapleMono-CN-Regular/result.css" rel="stylesheet" />
         {/* Google 统计 */}
         <GoogleUtilities />
         {/* 微软统计 */}
@@ -77,6 +77,8 @@ export default function RootLayout({
         <Analytics />
       </head>
       <body className="bg-background text-foreground flex min-h-screen flex-col">
+        {/* 远程字体非阻塞加载（水合后注入，避免阻塞首屏渲染） */}
+        <MapleMonoFont />
         <ThemeProvider attribute="class" enableSystem={false}>
           <MotionConfig reducedMotion="user">
             <FullLoading>

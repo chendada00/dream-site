@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 
+import { sortWebsites } from '@/lib/server/sort'
 import { getSupabaseServerClient } from '@/lib/supabase/server'
 import { RESPONSE, responseMessage } from '@/lib/utils'
 
@@ -60,22 +61,8 @@ export async function GET(request: NextRequest) {
 
     if (data) {
       data.forEach((category: Category) => {
-        category?.websites.sort((a, b) => {
-          // 2. 再按 pinned 降序 (true 排在前面)
-          if (a.pinned !== b.pinned)
-            return b.pinned ? 1 : -1
-
-          // 1. 先按 sort 降序 (b - a)
-          if (b.sort !== a.sort)
-            return b.sort - a.sort
-
-          // 3. 然后按 recommend 降序 (true 排在前面)
-          if (a.recommend !== b.recommend)
-            return b.recommend ? 1 : -1
-
-          // 4. 最后按 created_at 降序 (新日期在前)
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        })
+        if (category?.websites)
+          sortWebsites(category.websites)
       })
     }
 
@@ -98,6 +85,12 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const supabase = await getSupabaseServerClient()
+    // 路由内二次鉴权（middleware 的 getClaims 仅解码 JWT，不验证有效性）
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    if (userError || !user) {
+      return NextResponse.json(responseMessage(null, '未登录', -1))
+    }
+
     // 解析请求体
     const body = await request.json() // 如果是 JSON 数据
 
