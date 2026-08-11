@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.8.2](https://github.com/baiwumm/better-nav/compare/3.8.1...3.8.2) (2026-08-11)
+
+### 🐛 Bug Fixes | Bug 修复
+
+* **admin:** 修复编辑网站时 Logo 被上一次新增的 Logo 覆盖 ([e0125a4](https://github.com/baiwumm/better-nav/commit/e0125a493ef2079be5d78827e3f5e696d1ef3845))
+* **admin:** Logo 裁剪框跟随原图比例，支持非正方形图片 ([2824929](https://github.com/baiwumm/better-nav/commit/28249291aa51f5711e6c092642c33f6f0373779e))
+
+### 🎫 Chores | 其他更新
+
+* **deps:** 升级 Next.js 至 16.3.0 及配套依赖 ([9fc4ea4](https://github.com/baiwumm/better-nav/commit/9fc4ea43bf1d27d5a228139c55567fb308737640))
+
 ## [3.8.1](https://github.com/baiwumm/better-nav/compare/3.8.0...3.8.1) (2026-08-11)
 
 ### 🎫 Chores | 其他更新
