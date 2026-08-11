@@ -10,7 +10,7 @@ import {
   useOverlayState,
 } from '@heroui/react'
 import Image from 'next/image'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { formatBytes, useFileUpload } from '@/hooks/use-file-upload'
 
@@ -62,12 +62,19 @@ const LogoUpload: FC<LogoUploadProps> = ({
 
   const previewUrl = useMemo(() => innerFile?.preview ?? defaultAvatar, [innerFile, defaultAvatar])
 
-  // ✅ 副作用阶段再通知父组件
+  // 保持最新的 onFileChange 引用，避免父组件重渲染导致重复通知
+  const onFileChangeRef = useRef(onFileChange)
+
   useEffect(() => {
-    if (innerFile) {
-      onFileChange?.(innerFile)
-    }
-  }, [innerFile, onFileChange])
+    onFileChangeRef.current = onFileChange
+  }, [onFileChange])
+
+  // ✅ 仅当 innerFile 变化时通知父组件。
+  // 不能把 onFileChange 放进依赖：Modal 关闭动画期间父组件会因 onClose 重新渲染，
+  // 产生新的 onFileChange 引用，此时 innerFile 仍是旧文件，会导致父组件 logoFile 被重新写回，残留到下一次编辑。
+  useEffect(() => {
+    onFileChangeRef.current?.(innerFile)
+  }, [innerFile])
 
   return (
     <>

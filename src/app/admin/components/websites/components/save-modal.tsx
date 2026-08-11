@@ -68,6 +68,10 @@ const SaveModal: FC<SaveModalProps> = ({
   const [logoFile, setLogoFile] = useState<FileWithPreview['file'] | null>(null)
 
   useEffect(() => {
+    // 打开弹窗时重置，兜底避免上一次会话残留的 Logo 文件
+    if (!wasOpenRef.current && state.isOpen) {
+      setLogoFile(null)
+    }
     if (wasOpenRef.current && !state.isOpen) {
       formRef?.current?.reset()
       setTags([])
