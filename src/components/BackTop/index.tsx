@@ -178,7 +178,7 @@ const BackTop: FC<BackTopProps> = ({ visibilityHeight = 150 }) => {
           exit={{ opacity: 0, y: 24, scale: 0.5 }}
           initial={{ opacity: 0, y: 24, scale: 0.5 }}
           transition={{ type: 'spring', stiffness: 320, damping: 26 }}
-          whileHover={{ scale: 1.1, boxShadow: '0 12px 24px -6px rgb(0 0 0 / 0.35)' }}
+          whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.85 }}
           onClick={scrollToTop}
           className="fixed right-4 bottom-4 z-50 grid size-10 cursor-pointer place-items-center rounded-full bg-transparent p-0 outline-none select-none focus-visible:ring-2 focus-visible:ring-foreground/40"
