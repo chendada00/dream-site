@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.8.3](https://github.com/baiwumm/better-nav/compare/3.8.2...3.8.3) (2026-08-11)
+
+### 🎫 Chores | 其他更新
+
+* **lint:** 修复 ESLint 检查不通过的问题 ([18465ff](https://github.com/baiwumm/better-nav/commit/18465ffaea031ff4971cafd7cd6a42d2b0c3d7a9))
+
+### ♻ Code Refactoring | 代码重构
+
+* 优化首屏与运行时性能并加固 API 鉴权 ([e94f60b](https://github.com/baiwumm/better-nav/commit/e94f60bea8dba87c0682fcb58f7d8311a2e3ba22))
+
 ## [3.8.2](https://github.com/baiwumm/better-nav/compare/3.8.1...3.8.2) (2026-08-11)
 
 ### 🐛 Bug Fixes | Bug 修复
