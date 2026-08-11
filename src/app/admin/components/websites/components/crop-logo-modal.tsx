@@ -33,14 +33,13 @@ const CropLogoModal: FC<CropLogoModalProps> = ({ state, image, setInnerFile }) =
   const [zoom, setZoom] = useState(1)
   const [rotation, setRotation] = useState(0)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
-  const [mediaSize, setMediaSize] = useState<{ width: number; height: number } | null>(null)
+  const [mediaSize, setMediaSize] = useState<{ width: number, height: number } | null>(null)
 
   // 读取图片原始宽高，让裁剪框跟随原图比例，避免非正方形 Logo 裁剪不全
+  // image 为 null 时不渲染 Cropper（见下方条件渲染），无需在 effect 中同步重置状态
   useEffect(() => {
-    if (!image) {
-      setMediaSize(null)
+    if (!image)
       return
-    }
     const img = new Image()
     img.onload = () => setMediaSize({ width: img.naturalWidth, height: img.naturalHeight })
     img.src = image
