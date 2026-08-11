@@ -1,5 +1,34 @@
 # Changelog
 
+## [3.8.0](https://github.com/baiwumm/better-nav/compare/3.7.1...3.8.0) (2026-08-11)
+
+### ✨ Features | 新功能
+
+* **home:** 首页新增右侧分类锚点指示器 ([198b580](https://github.com/baiwumm/better-nav/commit/198b580b04d7bf5e77b8980ad1d734180f808977))
+* **transition:** 路由转场支持前进/后退方向感知滑动 ([c62cd58](https://github.com/baiwumm/better-nav/commit/c62cd589e76595ad1edf019604adef1a75feaf8f))
+
+### 🐛 Bug Fixes | Bug 修复
+
+* **home:** 修复客户端导航回首页时一直 loading ([041e950](https://github.com/baiwumm/better-nav/commit/041e9508ef49064a88a7cf7b45a16d9d009987af))
+* **home:** 移除 Suspense 流式取数，修复客户端导航卡加载 ([7816bd4](https://github.com/baiwumm/better-nav/commit/7816bd473be66c93d408674619b4f5868214c778))
+* **not-found:** 404页面适配暗黑模式并改用HeroUI Typography ([b305cdd](https://github.com/baiwumm/better-nav/commit/b305cdd311bf25fdd8b5b253e0d6d99a96c4a419))
+* **og-image, proxy:** 重写OpenGraph图片生成并放行OG路由 ([880e463](https://github.com/baiwumm/better-nav/commit/880e46383647fd668ad9f3ad42476b807dda892a)), closes [#0a0a0a](https://github.com/baiwumm/better-nav/issues/0a0a0a)
+* **transition:** 路由转场改为串行，先退出旧视图再进入新视图 ([7456b25](https://github.com/baiwumm/better-nav/commit/7456b255a8771fa407464d85ea250906bc524315))
+
+### 🎫 Chores | 其他更新
+
+* **home:** 移除全局 loading，admin 段单独保留路由加载态 ([b62415c](https://github.com/baiwumm/better-nav/commit/b62415cc4d08d03bc72f977e8b5f85eebbec22b6))
+
+### ♻ Code Refactoring | 代码重构
+
+* **backtop:** 优化回顶交互动画并修复滚动到顶后未隐藏 ([fa7bc54](https://github.com/baiwumm/better-nav/commit/fa7bc54c5c9eda760ba3ac87bea8c964c01021ae))
+* **home:** 首页数据改为服务端取数 (RSC + Suspense) ([4a6a4f2](https://github.com/baiwumm/better-nav/commit/4a6a4f2d1aa7be2e4ebabfa7aae8aa94669cfa70))
+* **typography:** 首页分类标题/登录应用名/用户菜单名改用Typography组件 ([aed5ee0](https://github.com/baiwumm/better-nav/commit/aed5ee05185528460f267b3f39467b1d95631d7f))
+
+### ⚡ Performance Improvements | 性能优化
+
+* **home:** 修复首页卡片出场动画并优化加载性能 ([cea463b](https://github.com/baiwumm/better-nav/commit/cea463bf3e51db043894cc1bfa3952989607332e))
+
 ## [3.7.1](https://github.com/baiwumm/better-nav/compare/3.7.0...3.7.1) (2026-08-05)
 
 ### 🐛 Bug Fixes | Bug 修复
