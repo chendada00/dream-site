@@ -22,7 +22,7 @@ import {
 import { useEffect, useRef, useState } from 'react'
 
 import TagInputs from '@/components/ui/tag-inputs'
-import useRequest from '@/hooks/use-request'
+import { useSwrMutation } from '@/hooks/use-swr'
 import { generateLogoUrl, get, RESPONSE } from '@/lib/utils'
 
 import LogoUpload from './logo-upload'
@@ -92,9 +92,7 @@ const SaveModal: FC<SaveModalProps> = ({
   }
 
   // 上传 Logo
-  const { loading: uploadLoading, run: fetchUploadLogo } = useRequest('/websites/:id/logo', {
-    method: 'PUT',
-    manual: true,
+  const { loading: uploadLoading, trigger: fetchUploadLogo } = useSwrMutation('/websites/:id/logo', 'PUT', {
     onSuccess: ({ code }) => {
       if (code === RESPONSE.SUCCESS) {
         onSuccess()
@@ -103,15 +101,13 @@ const SaveModal: FC<SaveModalProps> = ({
   })
 
   // 保存表单
-  const { loading, run } = useRequest<Website>('/websites', {
-    method: initialValues?.id ? 'PUT' : 'POST',
-    manual: true,
+  const { loading, trigger } = useSwrMutation<Website>('/websites', initialValues?.id ? 'PUT' : 'POST', {
     onSuccess: ({ code, data }) => {
       if (code === RESPONSE.SUCCESS) {
         if (data?.id && logoFile) {
           const formData = new FormData()
           formData.append('file', logoFile as File)
-          fetchUploadLogo(data.id, formData)
+          fetchUploadLogo({ id: data.id, data: formData })
         }
         else {
           onSuccess()
@@ -187,7 +183,7 @@ const SaveModal: FC<SaveModalProps> = ({
       })
       return
     }
-    initialValues?.id ? await run(initialValues.id, data) : await run(data)
+    await trigger({ id: initialValues?.id, data })
   }
   return (
     <Modal.Backdrop

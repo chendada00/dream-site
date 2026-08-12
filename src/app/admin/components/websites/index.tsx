@@ -18,7 +18,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import DataTablePagination from '@/components/DataTablePagination'
-import useRequest from '@/hooks/use-request'
+import { useSwrMutation, useSwrQuery } from '@/hooks/use-swr'
 import { get, RESPONSE } from '@/lib/utils'
 
 import { getColumns } from './components/columns'
@@ -59,28 +59,37 @@ const Websites: FC = () => {
   // 站点标签
   const [tags, setTags] = useState<string[]>([])
 
-  // 请求分类列表
-  const { data: categorysResult } = useRequest<PaginatingResponse<Category>>('/categorys', {
-    params: { pageIndex: 0, pageSize: 999 },
-  })
+  // 请求分类列表（下拉选项）
+  const { data: categorysResult } = useSwrQuery<PaginatingResponse<Category>>(['/categorys', { pageIndex: 0, pageSize: 999 }])
   const categorysList = useMemo(() => categorysResult?.list ?? [], [categorysResult])
 
   // 请求网站列表
-  const { data, loading, run } = useRequest<PaginatingResponse<Website>>('/websites', {
-    manual: true,
-    params: searchParams,
-  })
+  const [query, setQuery] = useState(searchParams)
+  const { data, loading, mutate } = useSwrQuery<PaginatingResponse<Website>>(['/websites', query], { keepPreviousData: true })
   const total = useMemo(() => data?.total ?? 0, [data])
   const list = useMemo(() => data?.list ?? [], [data])
   const searchParamsRef = useRef(searchParams)
+  const queryRef = useRef(query)
+  queryRef.current = query
 
   useEffect(() => {
     searchParamsRef.current = searchParams
   }, [searchParams])
 
-  // 发起请求
+  // 强制重新验证当前列表（删除/保存成功后刷新，绕过去重缓存）
+  const handleRefresh = () => {
+    mutate()
+  }
+
+  // 发起请求：搜索参数变化时更新 key 触发新请求；参数未变化时强制重新验证（保持原"点击查询即刷新"行为）
   const handleSearch = () => {
-    run(searchParams)
+    const next = searchParamsRef.current
+    if (JSON.stringify(next) === JSON.stringify(queryRef.current)) {
+      mutate()
+    }
+    else {
+      setQuery(next)
+    }
   }
 
   // 重置
@@ -88,7 +97,7 @@ const Websites: FC = () => {
     setName('')
     setCategoryId('')
     setPagination({ pageIndex: 0, pageSize: 10 })
-    run({
+    setQuery({
       name: '',
       category_id: '',
       pageIndex: 0,
@@ -111,9 +120,7 @@ const Websites: FC = () => {
   }, [saveModalState])
 
   // 删除网站
-  const { loading: delLoading, run: fetchDelWebsite } = useRequest('/websites', {
-    method: 'DELETE',
-    manual: true,
+  const { loading: delLoading, trigger: fetchDelWebsite } = useSwrMutation('/websites', 'DELETE', {
     onSuccess: ({ code }) => {
       if (code === RESPONSE.SUCCESS) {
         delDialogState.close()
@@ -121,7 +128,7 @@ const Websites: FC = () => {
           timeout: 2000,
           indicator: <CircleCheckFill />,
         })
-        handleSearch()
+        handleRefresh()
       }
     },
   })
@@ -135,7 +142,7 @@ const Websites: FC = () => {
   // 确认删除回调
   const handleDelConfirm = () => {
     if (editData?.id) {
-      fetchDelWebsite(editData.id)
+      fetchDelWebsite({ id: editData.id })
     }
   }
 
@@ -166,9 +173,11 @@ const Websites: FC = () => {
     onColumnVisibilityChange: setColumnVisibility,
   })
 
+  // 分页变化自动查询
   useEffect(() => {
-    run(searchParamsRef.current)
-  }, [run, pagination.pageIndex, pagination.pageSize])
+    // eslint-disable-next-line react/set-state-in-effect -- 分页变化需同步到查询参数，依赖仅 pagination 不构成循环
+    setQuery(q => ({ ...q, pageIndex: pagination.pageIndex, pageSize: pagination.pageSize }))
+  }, [pagination.pageIndex, pagination.pageSize])
   return (
     <>
       <Card className="shadow-lg">
@@ -195,7 +204,7 @@ const Websites: FC = () => {
       {/* 保存弹窗 */}
       <SaveModal
         categorysList={categorysList || []}
-        handleRefresh={handleSearch}
+        handleRefresh={handleRefresh}
         initialValues={editData}
         setTags={setTags}
         state={saveModalState}

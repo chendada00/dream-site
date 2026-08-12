@@ -15,7 +15,7 @@ import {
 } from '@heroui/react'
 import { useEffect, useRef } from 'react'
 
-import useRequest from '@/hooks/use-request'
+import { useSwrMutation } from '@/hooks/use-swr'
 import { RESPONSE } from '@/lib/utils'
 
 import type { Category, CategorySaveParams } from '@/types'
@@ -45,9 +45,7 @@ const SaveModal: FC<SaveModalProps> = ({ state, initialValues, handleRefresh, on
   }, [state.isOpen, onClose])
 
   // 保存表单
-  const { loading, run } = useRequest('/categorys', {
-    method: isEdit ? 'PUT' : 'POST',
-    manual: true,
+  const { loading, trigger } = useSwrMutation('/categorys', isEdit ? 'PUT' : 'POST', {
     onSuccess: ({ code }) => {
       if (code === RESPONSE.SUCCESS) {
         state.close()
@@ -68,7 +66,7 @@ const SaveModal: FC<SaveModalProps> = ({ state, initialValues, handleRefresh, on
       name: formData.get('name') as string,
       sort: Number(formData.get('sort')),
     }
-    initialValues?.id ? await run(initialValues.id, data) : await run(data)
+    initialValues?.id ? await trigger({ id: initialValues.id, data }) : await trigger({ data })
   }
   return (
     <Modal.Backdrop
