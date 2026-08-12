@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.8.4](https://github.com/baiwumm/better-nav/compare/3.8.3...3.8.4) (2026-08-12)
+
+### 🎫 Chores | 其他更新
+
+* **lint:** 升级 ESLint 至 v10 并同步 eslint 配置 ([c408858](https://github.com/baiwumm/better-nav/commit/c408858601d140315ac8873d2d54fedc09c76b22))
+
+### 💄 Styles | 风格
+
+* **backtop:** 移除回到顶部按钮 hover 阴影 ([cd5ebdc](https://github.com/baiwumm/better-nav/commit/cd5ebdc83c0e39ea892412de8228c38a76b96889))
+
 ## [3.8.3](https://github.com/baiwumm/better-nav/compare/3.8.2...3.8.3) (2026-08-11)
 
 ### 🎫 Chores | 其他更新
