@@ -7,13 +7,20 @@
  */
 import { Folder, Globe } from '@gravity-ui/icons'
 import { Tabs } from '@heroui/react'
+import { redirect } from 'next/navigation'
+
+import { requireAdmin } from '@/lib/supabase/server'
 
 import Categorys from './components/categorys'
 import Websites from './components/websites'
 
-import type { FC } from 'react'
+async function Admin() {
+  // 服务端校验管理员（登录 + 邮箱白名单），未通过跳转登录页
+  const admin = await requireAdmin()
+  if (!admin) {
+    redirect('/login')
+  }
 
-const Admin: FC = () => {
   return (
     <Tabs>
       <Tabs.ListContainer>

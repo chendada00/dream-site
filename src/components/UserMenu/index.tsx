@@ -15,6 +15,7 @@ import {
 } from '@heroui/react'
 import { useState } from 'react'
 
+import useRequest from '@/hooks/use-request'
 import { getSupabaseBrowserClient } from '@/lib/supabase/client'
 
 import type { User } from '@supabase/supabase-js'
@@ -29,6 +30,9 @@ const UserMenu: FC<UserMenuProps> = ({ user }) => {
   const router = useRouter()
   const alertState = useOverlayState()
   const [logoutLoading, setLogoutLoading] = useState(false)
+  // 查询当前用户是否为管理员（登录 + 邮箱白名单），非管理员不显示后台入口
+  const { data: adminInfo } = useRequest<{ isAdmin: boolean, email: string | null }>('/auth/me')
+  const isAdmin = adminInfo?.isAdmin === true
   // 用户名称
   const name = user?.user_metadata.name || user?.user_metadata.user_name || user?.email?.slice(0, 1)
   // 用户头像
@@ -92,10 +96,14 @@ const UserMenu: FC<UserMenuProps> = ({ user }) => {
           </div>
           <Separator />
           <Dropdown.Menu onAction={onClickMenu} className="font-normal">
-            <Dropdown.Item id="admin" textValue="Admin">
-              <GearDot className="size-4 shrink-0 text-muted" />
-              <Label>管理后台</Label>
-            </Dropdown.Item>
+            {isAdmin
+              ? (
+                  <Dropdown.Item id="admin" textValue="Admin">
+                    <GearDot className="size-4 shrink-0 text-muted" />
+                    <Label>管理后台</Label>
+                  </Dropdown.Item>
+                )
+              : null}
             <Dropdown.Item id="logout" variant="danger" textValue="Logout">
               <ArrowRightFromSquare className="size-4 shrink-0 text-danger" />
               <Label>退出登录</Label>

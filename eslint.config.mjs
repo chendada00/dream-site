@@ -4,6 +4,8 @@ export default antfu({
   // 忽略工具内部文件，避免被当作源码检查（.next 与 node_modules 已被默认排除）
   ignores: [
     '**/.reasonix/**',
+    // 移植指南为中文文档，含反引号标题与代码块，eslint 无法解析，不作为源码检查
+    'supabase/登录鉴权移植指南.md',
   ],
   nextjs: true,
   react: true,

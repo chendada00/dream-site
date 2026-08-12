@@ -35,6 +35,11 @@ yarn-error.log*
 .env.*
 !.env.example
 
+# 本地敏感/运行时文件（真实版 RLS 含管理员邮箱，不入库）
+supabase/rls.sql
+dev-server.log
+dev-server.err.log
+
 # vercel
 .vercel
 

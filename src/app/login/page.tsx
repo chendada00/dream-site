@@ -24,7 +24,6 @@ import {
   Form,
   InputGroup,
   Label,
-  Link,
   Separator,
   Spinner,
   TextField,
@@ -54,8 +53,6 @@ export default function Login() {
   const router = useRouter()
   const [emailLoading, setEmailLoading] = useState(false)
   const [oauthLoading, setOauthLoading] = useState(false)
-  // 是否注册
-  const [isSignup, setIsSignup] = useState(false)
   // 是否显示密码
   const [showPassword, setShowPassword] = useState(false)
 
@@ -71,39 +68,24 @@ export default function Login() {
 
     setEmailLoading(true)
 
-    // ✅ 提取公共 Supabase 调用逻辑
-    const authPromise = (async () => {
-      let result
-      if (isSignup) {
-        result = await supabase.auth.signUp(data as EmailForm)
-      }
-      else {
-        result = await supabase.auth.signInWithPassword(data as EmailForm)
-      }
-
+    // ✅ 直接走邮箱密码登录（注册入口已移除，仅白名单管理员可进后台）
+    const authPromise = supabase.auth.signInWithPassword(data as EmailForm).then((result) => {
       if (result.error) {
         throw result.error // 统一抛出错误
       }
       return result.data
-    })()
+    })
 
     toast.promise(authPromise, {
-      loading: isSignup ? '注册中...' : '登录中...',
+      loading: '登录中...',
       success: () => {
         setEmailLoading(false)
-        if (isSignup) {
-          form.reset()
-          setIsSignup(false)
-          return '提交成功，请到邮箱验证后登录'
-        }
-        else {
-          router.refresh()
-          return '登录成功，欢迎回来！'
-        }
+        router.refresh()
+        return '登录成功，欢迎回来！'
       },
       error: (err: { message: string }) => {
         setEmailLoading(false)
-        return `${isSignup ? '注册失败，请稍后重试' : '登录失败，请稍后重试'}：${err.message}`
+        return `登录失败，请稍后重试：${err.message}`
       },
     })
 
@@ -226,26 +208,11 @@ export default function Login() {
               {({ isPending }) => (
                 <>
                   {isPending ? <Spinner color="current" size="sm" /> : <Check />}
-                  {isPending ? (isSignup ? '注册中...' : '登录中...') : (isSignup ? '注册' : '登录')}
+                  {isPending ? '登录中...' : '登录'}
                 </>
               )}
             </Button>
           </Form>
-          <div className="flex justify-end items-center w-full mt-2">
-            {isSignup
-              ? (
-                  <Description>
-                    已经有账户？
-                    <Link onClick={() => setIsSignup(false)} className="underline-offset-4 hover:underline text-xs">立即登录</Link>
-                  </Description>
-                )
-              : (
-                  <Description>
-                    需要创建一个账户？
-                    <Link onClick={() => setIsSignup(true)} className="underline-offset-4 hover:underline text-xs">立即注册</Link>
-                  </Description>
-                )}
-          </div>
         </Card.Content>
         <Separator />
         <Card.Footer className="flex-col gap-2">

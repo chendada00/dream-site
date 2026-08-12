@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-import { getSupabaseServerClient } from '@/lib/supabase/server'
+import { getSupabaseServerClient, requireAdmin } from '@/lib/supabase/server'
 import { RESPONSE, responseMessage } from '@/lib/utils'
 
 import type { NextRequest } from 'next/server'
@@ -86,10 +86,10 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const supabase = await getSupabaseServerClient()
-    // 路由内二次鉴权（middleware 的 getClaims 仅解码 JWT，不验证有效性）
-    const { data: { user }, error: userError } = await supabase.auth.getUser()
-    if (userError || !user) {
-      return NextResponse.json(responseMessage(null, '未登录', -1))
+    // 校验管理员（登录 + 邮箱白名单，middleware 的 getClaims 仅解码 JWT，此处 getUser 验签兜底）
+    const user = await requireAdmin()
+    if (!user) {
+      return NextResponse.json(responseMessage(null, '未登录或无权限', RESPONSE.ERROR), { status: 401 })
     }
 
     // 解析请求体

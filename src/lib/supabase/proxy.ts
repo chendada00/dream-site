@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 
-import { responseMessage } from '@/lib/utils'
+import { RESPONSE, responseMessage } from '@/lib/utils'
 
 import type { NextRequest } from 'next/server'
 
@@ -53,20 +53,37 @@ export async function updateSession(request: NextRequest) {
 
   const { data } = await supabase.auth.getClaims()
 
-  const user = data?.claims
+  const claims = data?.claims
 
-  if (user && path.startsWith('/login')) {
+  // 管理员白名单（与 requireAdmin 保持一致：ADMIN_EMAILS 逗号分隔、大小写不敏感）
+  const adminEmails = (process.env.ADMIN_EMAILS || '')
+    .split(',')
+    .map(email => email.trim().toLowerCase())
+    .filter(Boolean)
+  const email = typeof claims?.email === 'string' ? claims.email.toLowerCase() : ''
+  const isAdmin = !!(email && adminEmails.includes(email))
+
+  // 已登录访问登录页：一律回首页（避免 claims 快照与 getUser 最新邮箱不一致时 /admin ↔ /login 302 循环）
+  if (claims && path.startsWith('/login')) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
-  if (!user && isWriteApiRoute) {
+  // 未登录或非白名单邮箱访问管理页面，一律跳登录页
+  if ((!claims || !isAdmin) && path.startsWith('/admin')) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/login'
+    return NextResponse.redirect(url)
+  }
+
+  // 写 API：未登录或非白名单一律 401（路由内 requireAdmin 二次验签兜底）
+  if ((!claims || !isAdmin) && isWriteApiRoute) {
     return NextResponse.json(
-      responseMessage(null, '未登录', -1),
+      responseMessage(null, '未登录或无权限', RESPONSE.ERROR),
       { status: 401 },
     )
   }
 
-  if (!user && !isApiRoute && !path.startsWith('/login')) {
+  if (!claims && !isApiRoute && !path.startsWith('/login')) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
