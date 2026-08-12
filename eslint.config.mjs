@@ -1,9 +1,9 @@
 import antfu from '@antfu/eslint-config'
 
 export default antfu({
-  // 忽略 Reasonix 内部工具目录（已被 .gitignore 排除，不应参与 lint）
+  // 忽略工具内部文件，避免被当作源码检查（.next 与 node_modules 已被默认排除）
   ignores: [
-    '.reasonix/**',
+    '**/.reasonix/**',
   ],
   nextjs: true,
   react: true,
