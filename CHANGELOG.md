@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.8.5](https://github.com/baiwumm/better-nav/compare/3.8.4...3.8.5) (2026-08-12)
+
+### ✨ Features | 新功能
+
+* **auth:** 登录鉴权加固 - 三层管理员白名单与 RLS 兜底 ([f6e6de7](https://github.com/baiwumm/better-nav/commit/f6e6de76abc96addb31ce464385d161d2993f764))
+
+### ♻ Code Refactoring | 代码重构
+
+* **request:** 以 SWR 替换手写 useRequest 保持行为一致 ([4ce723c](https://github.com/baiwumm/better-nav/commit/4ce723c275bcf75b17719cf05df475a36a8e5a43))
+
 ## [3.8.4](https://github.com/baiwumm/better-nav/compare/3.8.3...3.8.4) (2026-08-12)
 
 ### 🎫 Chores | 其他更新
